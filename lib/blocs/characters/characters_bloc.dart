@@ -3,24 +3,24 @@ import 'package:rick_and_morty_app/models/character.dart';
 import 'package:rick_and_morty_app/models/location.dart';
 import 'package:rick_and_morty_app/repositories/character_repository.dart';
 import 'package:rick_and_morty_app/repositories/location_repository.dart';
-import './character_event.dart';
-import './character_state.dart';
+import './characters_event.dart';
+import './characters_state.dart';
 
-class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
+class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
   final CharacterRepository characterRepository;
   final LocationRepository locationRepository;
 
-  CharacterBloc({this.characterRepository, this.locationRepository});
+  CharactersBloc({this.characterRepository, this.locationRepository});
 
   @override
-  CharacterState get initialState => CharacterUnloaded();
+  CharactersState get initialState => CharactersUnloaded();
 
   @override
-  Stream<CharacterState> mapEventToState(
-    CharacterEvent event,
+  Stream<CharactersState> mapEventToState(
+    CharactersEvent event,
   ) async* {
-    if (event is FetchCharacter) {
-      final oldCharacters = (currentState is CharacterLoaded) ? (currentState as CharacterLoaded).characters : [];
+    if (event is FetchCharacters) {
+      final oldCharacters = (currentState is CharactersLoaded) ? (currentState as CharactersLoaded).characters : [];
       List<Character> characters = await characterRepository.getAll(event.id);
 
        characters.forEach((character) async {
@@ -39,7 +39,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       if(event.id > 1){
         characters = [...oldCharacters, ...characters];
       }
-      yield (CharacterLoaded(characters: characters, page: event.id));
+      yield (CharactersLoaded(characters: characters, page: event.id));
     }
   }
 }

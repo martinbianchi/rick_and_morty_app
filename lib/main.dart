@@ -2,17 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_and_morty_app/blocs/character_bloc.dart';
-import 'package:rick_and_morty_app/blocs/character_state.dart';
-import 'package:rick_and_morty_app/repositories/character_repository.dart';
-import 'package:rick_and_morty_app/repositories/location_repository.dart';
-import 'package:rick_and_morty_app/widgets/bottom_loader.dart';
-import 'package:rick_and_morty_app/widgets/character_card.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:rick_and_morty_app/blocs/character/character_bloc.dart';
+import 'package:rick_and_morty_app/blocs/characters/characters_event.dart';
+import 'package:rick_and_morty_app/screens/character_detail_screen.dart';
 
-import 'blocs/character_event.dart';
+import './blocs/characters/characters_bloc.dart';
+import './blocs/characters/characters_state.dart';
+import './blocs/characters/characters_event.dart';
+import './repositories/character_repository.dart';
+import './repositories/location_repository.dart';
+import './widgets/bottom_loader.dart';
+import './widgets/character_card.dart';
 
 void main() {
   final CharacterRepository characterRepository =
@@ -36,25 +39,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  CharacterBloc _characterBloc;
+  CharactersBloc _charactersBloc;
 
   @override
   void initState() {
     super.initState();
-    _characterBloc = CharacterBloc(
+    _charactersBloc = CharactersBloc(
       characterRepository: widget.characterRepository,
       locationRepository: widget.locationRepository,
     );
-    _characterBloc.dispatch(FetchCharacter(id: 1));
+    _charactersBloc.dispatch(FetchCharacters(id: 1));
   }
 
   @override
   Widget build(BuildContext context) {
     int index;
+
+    final appBar = AppBar(
+      title: Text('Rick and Morty'),
+    );
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: Colors.teal,
+          // accentColor: Colors.tealAccent,
+          iconTheme: IconThemeData(color: Colors.tealAccent),
           textTheme: TextTheme(
             title: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             body1: TextStyle(
@@ -63,24 +73,20 @@ class _MyAppState extends State<MyApp> {
           ),
           fontFamily: 'Blinker'),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Rick and Morty'),
-        ),
+        appBar: appBar,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Text(
-                'The Rick and Morty Library',
-                style: TextStyle(fontSize: 28.0),
-              ),
-            ),
-            BlocProvider(
-              builder: (ctx) => _characterBloc,
-              child: BlocBuilder<CharacterBloc, CharacterState>(
+            MultiBlocProvider(
+              providers: [
+                BlocProvider<CharactersBloc>(
+                  builder: (ctx) => _charactersBloc,
+                ),
+              ],
+              child: BlocBuilder<CharactersBloc, CharactersState>(
                 builder: (context, state) {
-                  if (state is CharacterLoaded) {
+                  if (state is CharactersLoaded) {
                     return Column(
                       children: <Widget>[
                         CarouselSlider(
@@ -92,14 +98,17 @@ class _MyAppState extends State<MyApp> {
                               // var modToCompare = (state.page * 19);
                               // var mod = val % 19;
                               if (val == 19) {
-                                _characterBloc.dispatch(
-                                  FetchCharacter(
+                                _charactersBloc.dispatch(
+                                  FetchCharacters(
                                     id: (state.page + 1),
                                   ),
                                 );
                               }
                             },
-                            height: 520,
+                            aspectRatio: 0.63,
+                            // height: (MediaQuery.of(context).size.height -
+                            //     appBar.preferredSize.height -
+                            //     MediaQuery.of(context).padding.top) * 0.9,
                             items: state.characters.map((character) {
                               return Builder(
                                 builder: (ctx) {
@@ -125,6 +134,9 @@ class _MyAppState extends State<MyApp> {
           ],
         ),
       ),
+      routes: {
+        CharacterDetailScreen.routeName: (ctx) => CharacterDetailScreen(characterRepository: widget.characterRepository),
+      },
     );
   }
 }
