@@ -26,6 +26,7 @@ class CharactersScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is CharactersLoaded) {
                 return CarouselSlider(
+                  height: MediaQuery.of(context).size.height * 0.85,
                   enableInfiniteScroll: false,
                   onPageChanged: (val) {
                     print(val);

@@ -20,23 +20,36 @@ class CharacterCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20.0)),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: Image.network(
-                    character.imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (ctx, child, event) {
-                      if (event == null) {
-                        return child;
-                      }
-                      return Image.asset('assets/images/no-image.jpeg');
-                    },
+              Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20.0)),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.45,
+                      child: Image.network(
+                        character.imageUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (ctx, child, event) {
+                          if (event == null) {
+                            return child;
+                          }
+                          return Image.asset('assets/images/no-image.jpeg');
+                        },
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.favorite_border),
+                      iconSize: 35.0,
+                      color: Colors.tealAccent,
+                      onPressed: () {},
+                    ),
+                  )
+                ],
               ),
               Container(
                 padding: const EdgeInsets.all(5.0),
@@ -44,7 +57,7 @@ class CharacterCard extends StatelessWidget {
                   child: Text(
                     character.name,
                     style:
-                        TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
