@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_and_morty_app/blocs/character/character_bloc.dart';
-import 'package:rick_and_morty_app/blocs/character/character_event.dart';
 import 'package:rick_and_morty_app/models/character.dart';
 import 'package:rick_and_morty_app/screens/character_detail_screen.dart';
-import 'package:rick_and_morty_app/widgets/tag_info.dart';
 import 'package:rick_and_morty_app/widgets/tile_info.dart';
 
 class CharacterCard extends StatelessWidget {
@@ -15,7 +11,7 @@ class CharacterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: MediaQuery.of(context).size.width * 0.75,
       child: Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -29,20 +25,26 @@ class CharacterCard extends StatelessWidget {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20.0)),
                 child: Container(
-                  height: 300,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   child: Image.network(
                     character.imageUrl,
                     fit: BoxFit.cover,
+                    loadingBuilder: (ctx, child, event) {
+                      if (event == null) {
+                        return child;
+                      }
+                      return Image.asset('assets/images/no-image.jpeg');
+                    },
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(5.0),
                 child: FittedBox(
                   child: Text(
                     character.name,
                     style:
-                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -61,13 +63,15 @@ class CharacterCard extends StatelessWidget {
                 title: 'Type',
                 info: character.type,
               ),
+              Spacer(),
               Divider(),
               ListTile(
                 title: Text('View more...'),
                 trailing: Icon(Icons.chevron_right),
                 onTap: () {
                   Navigator.of(context).pushNamed(
-                      CharacterDetailScreen.routeName, arguments: character.id);
+                      CharacterDetailScreen.routeName,
+                      arguments: character.id);
                 },
               ),
             ],

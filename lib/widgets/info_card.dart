@@ -30,7 +30,6 @@ class InfoCard extends StatelessWidget {
           color: backgroundColor,
         ),
         child: Row(
-          
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width * 0.3,
@@ -41,12 +40,12 @@ class InfoCard extends StatelessWidget {
                     '$title',
                     style: TextStyle(
                         color: primaryColor,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold),
                   ),
                   Icon(
                     Icons.my_location,
-                    size: 60.0,
+                    size: 40.0,
                     color: primaryColor,
                   ),
                 ],
@@ -55,10 +54,11 @@ class InfoCard extends StatelessWidget {
             Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text('Name: $planetName'),
                   Text('Type: $planetType'),
-                  Text(dimension)
+                  Text(dimension.toLowerCase() == 'unknown' ? 'Dimension: Unknown' : dimension)
                 ],
               ),
             )
@@ -66,6 +66,5 @@ class InfoCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

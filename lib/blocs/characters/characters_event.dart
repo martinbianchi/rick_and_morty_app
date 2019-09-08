@@ -3,8 +3,12 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class CharactersEvent {}
 
-class FetchCharacters extends CharactersEvent {
-  final int id;
+class FetchCharacters extends CharactersEvent { }
 
-  FetchCharacters({this.id});
+class SearchCharacters extends CharactersEvent {
+  final String searchText;
+
+  SearchCharacters({this.searchText});
 }
+
+class CancelSearch extends CharactersEvent {}

@@ -13,13 +13,17 @@ class TileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: IconButton(
-        icon: Icon(icon, color: Colors.teal,),
-        onPressed: null,
+    return Container(
+      height: 50.0,
+      child: ListTile(
+        dense: true,
+        leading: IconButton(
+          icon: Icon(icon, color: Colors.teal,),
+          onPressed: null,
+        ),
+        subtitle: Text(info),
+        title: Text(title),
       ),
-      subtitle: Text(info),
-      title: Text(title),
     );
   }
 }

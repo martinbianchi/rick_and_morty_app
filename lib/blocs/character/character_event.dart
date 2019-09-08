@@ -2,7 +2,7 @@
 abstract class CharacterEvent {}
 
 class FetchCharacter extends CharacterEvent{
-  final int id;
+  final String id;
 
   FetchCharacter(this.id);
 }

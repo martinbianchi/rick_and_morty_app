@@ -1,9 +1,10 @@
 import '../../models/character.dart';
-import '../../models/episode.dart';
 
 abstract class CharacterState {}
 
 class CharacterUnloaded extends CharacterState {}
+
+class CharacterLoading extends CharacterState {}
 
 class CharacterLoaded extends CharacterState {
   final Character character;
