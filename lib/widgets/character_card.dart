@@ -56,12 +56,12 @@ class CharacterCard extends StatelessWidget {
               TileInfo(
                 icon: Icons.bug_report,
                 title: 'Specie',
-                info: character.species,
+                info: character.type.isEmpty ? character.species: '${character.species}, ${character.type}',
               ),
               TileInfo(
                 icon: Icons.directions_walk,
-                title: 'Type',
-                info: character.type,
+                title: 'Gender',
+                info: character.gender,
               ),
               Spacer(),
               Divider(),
